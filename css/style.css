@@ -127,25 +127,71 @@ a:hover { color: var(--text-primary); }
 /* =========================================
    Hero / Promo Section (Horizontal Scroll)
 ========================================= */
+/* =========================================
+   Hero / Promo Section (With Background Image)
+========================================= */
 #hero-section {
     max-width: 1200px;
     margin: 40px auto;
-    padding: 30px;
-    background-color: var(--surface-color);
-    border: 1px dashed var(--text-secondary);
-    border-radius: 8px;
+    /* Removed the dashed border and padding from the container */
 }
 
-.hero-header h2 { font-size: 1.8rem; margin-bottom: 5px; }
-.hero-header p { color: var(--text-secondary); margin-bottom: 20px; }
-.hero-subtext {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
+/* The New Image Banner */
+.hero-banner {
+    /* YOU MUST SAVE A BACKGROUND IMAGE IN YOUR IMAGES FOLDER NAMED hero-bg.jpg */
+    background-image: url('../images/hero-bg.jpg'); 
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    padding: 100px 40px; /* Makes the banner tall */
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+/* Dark gradient overlay so text is readable */
+.hero-banner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(to right, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 0.2) 100%);
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative; /* Keeps text above the dark overlay */
+    z-index: 2;
+    max-width: 600px;
+}
+
+.hero-content h2 { 
+    font-size: 2.5rem; 
+    margin-bottom: 10px; 
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
+.hero-content p { 
+    font-size: 1.1rem;
+    color: var(--text-secondary); 
+}
+
+/* The Recommended Movies Area Below */
+.featured-header {
     margin-bottom: 15px;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 10px;
+}
+
+.featured-header h3 {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    margin-bottom: 5px;
+}
+
+.section-divider {
+    border: 0;
+    height: 1px;
+    background: var(--border-color);
+    margin-bottom: 20px;
 }
 
 .featured-movies-container {
@@ -155,25 +201,22 @@ a:hover { color: var(--text-primary); }
     padding-bottom: 10px;
 }
 
-/* Hide scrollbar but keep functionality */
-.no-scrollbar::-webkit-scrollbar { display: none; }
-.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
 .featured-card {
-    min-width: 200px;
-    background-color: var(--bg-color);
+    min-width: 220px;
+    background-color: var(--surface-color);
     padding: 10px;
     border: 1px solid var(--border-color);
+    border-radius: 6px;
 }
 .featured-card img {
     width: 100%;
-    height: 280px;
+    height: 300px;
     object-fit: cover;
-    background-color: #333;
+    background-color: #222;
+    border-radius: 4px;
 }
 .featured-card h3 { font-size: 1rem; margin-top: 10px; }
 .featured-card p { font-size: 0.75rem; color: var(--text-secondary); }
-
 /* =========================================
    Dynamic Movie Grid & Hover Effects
 ========================================= */
