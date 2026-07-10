@@ -1,26 +1,31 @@
 /* =========================================
-   GLOBAL VARIABLES (Design Tokens)
+   GLOBAL VARIABLES (Virgin Galactic Theme)
 ========================================= */
 :root {
     /* Color Palette */
-    --bg-deep-space: #0b0c10;       /* Main dark background */
-    --bg-surface: #1f2833;          /* Card and form backgrounds */
-    --text-primary: #ffffff;        /* Main headings */
-    --text-secondary: #c5c6c7;      /* Paragraphs and descriptions */
-    --accent-cyan: #66fcf1;         /* Primary buttons and highlights */
-    --accent-teal: #45a29e;         /* Hover states and borders */
-    --error-red: #ff4c4c;           /* For JavaScript validation messages */
+    --bg-deep-space: #000000;       /* Pure black for the void of space */
+    --bg-surface: #0a0a0e;          /* Extremely dark grey/blue for elevated cards */
+    --text-primary: #ffffff;        /* Stark white for high-contrast headings */
+    --text-secondary: #a3a3a8;      /* Metallic silver/grey for body text */
+    
+    /* Accents */
+    --accent-cyan: #ffffff;         /* Galactic Violet/Indigo for primary buttons */
+    --accent-teal: #e10a0a;         /* Virgin's signature 'Monza Red' for hover states */
+    --error-red: #ff3333;           /* Bright red for JavaScript validation messages */
 
     /* Typography */
-    --font-main: 'Inter', system-ui, sans-serif;
-    --font-heading: 'Space Grotesk', sans-serif; /* Good for that sci-fi feel */
+    /* Note: Virgin Galactic uses 'Euclid Galactic'. Montserrat is the closest free geometric fallback */
+    --font-main: 'Montserrat', 'Inter', system-ui, sans-serif;
+    --font-heading: 'Montserrat', 'Space Grotesk', sans-serif; 
 
     /* Spacing & Layout */
     --spacing-sm: 8px;
     --spacing-md: 16px;
     --spacing-lg: 32px;
     --spacing-xl: 64px;
-    --border-radius: 4px;
+    
+    /* Virgin Galactic uses sharp, aggressive edges rather than soft curves */
+    --border-radius: 0px;           /* Changed to 0px for that sharp aerospace look */
     --max-width: 1200px;
 }
 
@@ -451,6 +456,31 @@ img {
     transform: translateY(-4px);
 }
 
+.card-img {
+    height: 120px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+}
+
+.card-img-fallback {
+    font-size: 2rem;
+    opacity: 0.3;
+    z-index: 1;
+}
+
 .destination-card h3 {
     font-size: 1.1rem;
     margin-bottom: var(--spacing-sm);
@@ -477,10 +507,32 @@ img {
     color: var(--accent-cyan);
     opacity: 0.8;
     display: flex;
-    gap: var(--spacing-md);
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
     margin-top: var(--spacing-sm);
     padding-top: var(--spacing-sm);
     border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.destination-card .card-cta {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 8px 20px;
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--bg-deep-space);
+    background-color: var(--accent-cyan);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border-radius: var(--border-radius);
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+}
+
+.destination-card .card-cta:hover {
+    background-color: var(--accent-teal);
+    color: var(--bg-deep-space);
 }
 
 @media (max-width: 768px) {

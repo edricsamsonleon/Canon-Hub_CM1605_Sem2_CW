@@ -118,11 +118,11 @@ function buildFooter() {
 ----------------------------------------- */
 
 const XML_PATH = 'data/destinations.xml';
-let cachedData = null; // Cache parsed XML data
+let cachedData = null;
 
 /**
  * Fetch and parse destinations.xml.
- * Returns an object with { categories: [...], packages: [...] }.
+ * Returns { destinations: [...], packages: [...] } matching the XML structure.
  */
 async function fetchDestinations() {
     if (cachedData) return cachedData;
@@ -135,52 +135,52 @@ async function fetchDestinations() {
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
 
-        // Check for parser errors
         const parseError = xmlDoc.querySelector('parsererror');
         if (parseError) throw new Error('XML parse error: ' + parseError.textContent);
 
-        // Extract categories
-        const categoryNodes = xmlDoc.querySelectorAll('category');
-        const categories = [];
-        categoryNodes.forEach(catNode => {
-            const categoryId = catNode.getAttribute('id') || '';
-            const destinations = [];
-            catNode.querySelectorAll('destination').forEach(destNode => {
-                destinations.push({
-                    id: destNode.getAttribute('id') || '',
-                    name: getXmlText(destNode, 'name'),
-                    description: getXmlText(destNode, 'description'),
-                    distance: getXmlText(destNode, 'distance'),
-                    type: getXmlText(destNode, 'type'),
-                    image: getXmlText(destNode, 'image'),
-                });
+        // Parse all 90 destinations (flat list, inline <category> text)
+        const destNodes = xmlDoc.querySelectorAll('destinations > destination');
+        const destinations = [];
+        destNodes.forEach(node => {
+            destinations.push({
+                id:              node.getAttribute('id') || '',
+                name:            getXmlText(node, 'name'),
+                category:        getXmlText(node, 'category'),
+                description:     getXmlText(node, 'description'),
+                lightYears:      getXmlText(node, 'lightYearsFromEarth'),
+                requiredShip:    getXmlText(node, 'requiredShip'),
+                cost:            getXmlText(node, 'cost'),
+                imagePath:       getXmlText(node, 'imagePath'),
             });
-            categories.push({ id: categoryId, destinations });
         });
 
-        // Extract packages
-        const packagesNode = xmlDoc.querySelector('packages');
+        // Parse all 15 packages
+        const pkgNodes = xmlDoc.querySelectorAll('packages > package');
         const packages = [];
-        if (packagesNode) {
-            packagesNode.querySelectorAll('package').forEach(pkgNode => {
-                const destRef = pkgNode.querySelector('destinationRef');
-                packages.push({
-                    id: pkgNode.getAttribute('id') || '',
-                    name: getXmlText(pkgNode, 'name'),
-                    description: getXmlText(pkgNode, 'description'),
-                    price: getXmlText(pkgNode, 'price'),
-                    duration: getXmlText(pkgNode, 'duration'),
-                    destinationRef: destRef ? destRef.getAttribute('id') : '',
-                    highlights: getXmlText(pkgNode, 'highlights'),
+        pkgNodes.forEach(node => {
+            const stops = [];
+            node.querySelectorAll('destinationRef').forEach(ref => {
+                stops.push({
+                    category: ref.getAttribute('category') || '',
+                    id:       ref.getAttribute('id') || '',
                 });
             });
-        }
+            packages.push({
+                id:             node.getAttribute('id') || '',
+                name:           getXmlText(node, 'packageName'),
+                description:    getXmlText(node, 'description'),
+                totalDuration:  getXmlText(node, 'totalDuration'),
+                price:          getXmlText(node, 'price'),
+                stops:          stops,
+                imagePath:      getXmlText(node, 'imagePath'),
+            });
+        });
 
-        cachedData = { categories, packages };
+        cachedData = { destinations, packages };
         return cachedData;
     } catch (error) {
         console.error('Failed to load destinations.xml:', error);
-        return { categories: [], packages: [] };
+        return { destinations: [], packages: [] };
     }
 }
 
@@ -192,55 +192,73 @@ function getXmlText(parent, tagName) {
     return el ? el.textContent.trim() : '';
 }
 
+/**
+ * Format a cost string with commas (e.g. "1000000" → "1,000,000").
+ */
+function formatCost(costStr) {
+    const num = parseInt(costStr, 10);
+    return isNaN(num) ? costStr : num.toLocaleString();
+}
+
+/**
+ * Get all unique category names from the destination list.
+ */
+function getCategories(destinations) {
+    const cats = [...new Set(destinations.map(d => d.category))];
+    // Maintain a consistent order
+    const order = [
+        'Nebulas', 'Stars', 'Natural Satellites',
+        'Non-Habitable Planets', 'Habitable Planets', 'Black Holes'
+    ];
+    return order.filter(c => cats.includes(c));
+}
+
 
 /* -----------------------------------------
    DESTINATIONS PAGE: Render & Filter
 ----------------------------------------- */
 
 /**
- * Get the display-friendly category label.
+ * Category-specific CSS gradient placeholders (used until real images arrive).
  */
-function getCategoryLabel(categoryId) {
-    const labels = {
-        'nebulas': 'Nebula',
-        'stars': 'Star',
-        'natural-satellites': 'Natural Satellite',
-        'non-habitable-planets': 'Non-Habitable Planet',
-        'habitable-planets': 'Habitable Planet',
-        'black-holes': 'Black Hole',
+function categoryGradient(category) {
+    const map = {
+        'Nebulas':              'linear-gradient(135deg, #1a0a2e, #16213e)',
+        'Stars':                'linear-gradient(135deg, #1a1a0a, #3e2e16)',
+        'Natural Satellites':   'linear-gradient(135deg, #0a1a1a, #162e2e)',
+        'Non-Habitable Planets':'linear-gradient(135deg, #1a0a0a, #3e1616)',
+        'Habitable Planets':    'linear-gradient(135deg, #0a1a0a, #162e16)',
+        'Black Holes':          'linear-gradient(135deg, #0a0a1a, #16163e)',
     };
-    return labels[categoryId] || categoryId;
+    return map[category] || 'var(--bg-surface)';
 }
 
 /**
- * Create a single destination card element.
+ * Create a single destination card element from real XML data.
  */
-function createDestinationCard(destination, categoryId) {
+function createDestinationCard(dest) {
     const card = document.createElement('div');
     card.className = 'destination-card';
-    card.setAttribute('data-category', categoryId);
+    card.setAttribute('data-category', dest.category);
 
-    const placeholderGradients = {
-        'nebulas': 'linear-gradient(135deg, #1a0a2e, #16213e)',
-        'stars': 'linear-gradient(135deg, #1a1a0a, #3e2e16)',
-        'natural-satellites': 'linear-gradient(135deg, #0a1a1a, #162e2e)',
-        'non-habitable-planets': 'linear-gradient(135deg, #1a0a0a, #3e1616)',
-        'habitable-planets': 'linear-gradient(135deg, #0a1a0a, #162e16)',
-        'black-holes': 'linear-gradient(135deg, #0a0a1a, #16163e)',
-    };
-
-    const gradient = placeholderGradients[categoryId] || 'var(--bg-surface)';
+    const gradient = categoryGradient(dest.category);
+    const formattedCost = dest.cost ? formatCost(dest.cost) : '';
+    const hasImage = dest.imagePath && dest.imagePath.length > 0;
 
     card.innerHTML = `
-        <div style="height: 120px; border-radius: 4px; margin-bottom: 12px; background: ${gradient}; display: flex; align-items: center; justify-content: center;">
-            <span style="font-size: 2rem; opacity: 0.3;">&#9733;</span>
+        <div class="card-img" style="background: ${gradient};">
+            ${hasImage
+                ? `<img src="${dest.imagePath}" alt="${dest.name}" loading="lazy" onerror="this.parentElement.innerHTML='<span class=\\'card-img-fallback\\'>&#9733;</span>'">`
+                : `<span class="card-img-fallback">&#9733;</span>`
+            }
         </div>
-        <div class="card-category">${getCategoryLabel(categoryId)}</div>
-        <h3>${destination.name}</h3>
-        <p>${destination.description}</p>
+        <div class="card-category">${dest.category}</div>
+        <h3>${dest.name}</h3>
+        <p>${dest.description}</p>
         <div class="card-meta">
-            ${destination.distance ? `<span>&#9881; ${destination.distance}</span>` : ''}
-            ${destination.type ? `<span>&#9679; ${destination.type}</span>` : ''}
+            <span title="Distance">✦ ${dest.lightYears} ly</span>
+            <span title="Required vessel">⌂ ${dest.requiredShip}</span>
+            ${formattedCost ? `<span title="Cost in credits">★ CR ${formattedCost}</span>` : ''}
         </div>
     `;
 
@@ -248,27 +266,19 @@ function createDestinationCard(destination, categoryId) {
 }
 
 /**
- * Render destination cards into the grid, filtered by category.
+ * Render destination cards into the grid filtered by category name.
  */
-function renderDestinations(categories, filterCategory) {
+function renderDestinations(destinations, filterCategory) {
     const grid = document.getElementById('destinations-grid');
     if (!grid) return;
 
     grid.innerHTML = '';
 
-    let hasResults = false;
+    const filtered = filterCategory === 'all'
+        ? destinations
+        : destinations.filter(d => d.category === filterCategory);
 
-    categories.forEach(category => {
-        if (filterCategory !== 'all' && category.id !== filterCategory) return;
-
-        category.destinations.forEach(dest => {
-            const card = createDestinationCard(dest, category.id);
-            grid.appendChild(card);
-            hasResults = true;
-        });
-    });
-
-    if (!hasResults) {
+    if (filtered.length === 0) {
         grid.innerHTML = `
             <div style="grid-column: 1 / -1; text-align: center; padding: var(--spacing-xl);">
                 <p style="color: var(--text-secondary); font-size: 1.1rem;">
@@ -276,19 +286,25 @@ function renderDestinations(categories, filterCategory) {
                 </p>
             </div>
         `;
+        return;
     }
+
+    filtered.forEach(dest => {
+        grid.appendChild(createDestinationCard(dest));
+    });
 }
 
 /**
- * Set up the filter bar click handlers and load data.
+ * Set up the filter bar and load destinations data.
  */
 async function initDestinationsPage() {
     const filterBar = document.getElementById('filter-bar');
     const grid = document.getElementById('destinations-grid');
-    if (!filterBar || !grid) return; // Not on destinations page
+    if (!filterBar || !grid) return;
 
     const data = await fetchDestinations();
-    if (!data.categories.length) {
+
+    if (!data.destinations.length) {
         grid.innerHTML = `
             <div style="grid-column: 1 / -1; text-align: center; padding: var(--spacing-xl);">
                 <p style="color: var(--text-secondary);">Destination data is being uploaded. Check back soon.</p>
@@ -297,18 +313,16 @@ async function initDestinationsPage() {
         return;
     }
 
-    // Initial render — show all
-    renderDestinations(data.categories, 'all');
+    // Initial render — show all 90 destinations
+    renderDestinations(data.destinations, 'all');
 
     // Filter button click handlers
     filterBar.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-            // Update active state
             filterBar.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-
             const category = btn.getAttribute('data-category');
-            renderDestinations(data.categories, category);
+            renderDestinations(data.destinations, category);
         });
     });
 }
@@ -319,7 +333,7 @@ async function initDestinationsPage() {
 ----------------------------------------- */
 async function initFeaturedPackages() {
     const grid = document.getElementById('featured-grid');
-    if (!grid) return; // Not on homepage
+    if (!grid) return;
 
     const data = await fetchDestinations();
     if (!data.packages.length) {
@@ -331,31 +345,35 @@ async function initFeaturedPackages() {
         return;
     }
 
-    // Show up to 3 featured packages
+    // Show first 3 packages as featured
     const featured = data.packages.slice(0, 3);
     featured.forEach(pkg => {
         const card = document.createElement('div');
         card.className = 'destination-card';
 
-        // Try to find the referenced destination name
-        let destName = '';
-        if (pkg.destinationRef) {
-            data.categories.forEach(cat => {
-                cat.destinations.forEach(d => {
-                    if (d.id === pkg.destinationRef) destName = d.name;
-                });
-            });
-        }
+        // Build a list of stop names for display
+        const stopNames = pkg.stops.map(stop => {
+            const match = data.destinations.find(d => d.id === stop.id);
+            return match ? match.name : stop.id;
+        });
+
+        const formattedCost = pkg.price ? formatCost(pkg.price) : '';
 
         card.innerHTML = `
-            <div class="card-category">Featured Package</div>
-            <h3>${pkg.name}</h3>
-            ${destName ? `<p style="font-size: 0.8rem; color: var(--accent-teal); margin-bottom: var(--spacing-sm);">Destination: ${destName}</p>` : ''}
-            <p>${pkg.description || 'Explore this incredible journey.'}</p>
-            <div class="card-meta">
-                ${pkg.duration ? `<span>&#9201; ${pkg.duration}</span>` : ''}
-                ${pkg.price ? `<span>&#9733; ${pkg.price}</span>` : ''}
+            <div class="card-img" style="background: linear-gradient(135deg, #0f0f1e, #1f2833);">
+                <span class="card-img-fallback" style="font-size: 1.6rem;">&#9733;</span>
             </div>
+            <div class="card-category">Curated Package</div>
+            <h3>${pkg.name}</h3>
+            <p>${pkg.description}</p>
+            <p style="font-size: 0.8rem; color: var(--accent-teal); margin: 8px 0;">
+                Stops: ${stopNames.join(', ')}
+            </p>
+            <div class="card-meta">
+                <span title="Duration">⏱ ${pkg.totalDuration}</span>
+                ${formattedCost ? `<span title="Package price">★ CR ${formattedCost}</span>` : ''}
+            </div>
+            <a href="booking.html" class="card-cta">Book This Journey</a>
         `;
 
         grid.appendChild(card);
@@ -367,15 +385,15 @@ async function initFeaturedPackages() {
    INITIALIZATION
 ----------------------------------------- */
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Inject navigation at the top of the body
+    // 1. Inject navigation
     const header = buildNavigation();
     document.body.insertBefore(header, document.body.firstChild);
 
-    // 2. Inject footer at the end of the body
+    // 2. Inject footer
     const footer = buildFooter();
     document.body.appendChild(footer);
 
-    // 3. Initialize page-specific features
+    // 3. Page-specific features
     initDestinationsPage();
     initFeaturedPackages();
 });

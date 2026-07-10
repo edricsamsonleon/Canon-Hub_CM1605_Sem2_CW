@@ -22,7 +22,7 @@
         <section class="booking-section">
             <div class="booking-card" id="booking-card">
                 <h2>Book Your Journey</h2>
-                <p class="form-subtitle">Fill in the details below and we'll chart your course.</p>
+                <p class="form-subtitle">Choose your vessel, class, and destinations. We'll chart your course across the cosmos.</p>
 
                 <form id="booking-form" novalidate>
                     <!-- 1. Text Field -->
@@ -39,15 +39,24 @@
                         <span class="error-message" id="error-email">Please enter a valid email address.</span>
                     </div>
 
-                    <!-- 3. Select Dropdown -->
+                    <!-- 3. Select Dropdown — ships from XML data -->
                     <div class="form-group" id="field-spacecraft">
                         <label for="spacecraft">Preferred Spacecraft</label>
                         <select id="spacecraft" name="spacecraft">
                             <option value="">— Select a vessel —</option>
-                            <option value="odyssey-x">Odyssey X — Long-haul cruiser</option>
-                            <option value="comet-flyer">Comet Flyer — Fast recon craft</option>
-                            <option value="void-drifter">Void Drifter — Stealth explorer</option>
-                            <option value="stellar-clipper">Stellar Clipper — Luxury liner</option>
+                            <option value="Standard Explorer">Standard Explorer — General purpose, short-range</option>
+                            <option value="Light Courier">Light Courier — Fast, light cargo and passengers</option>
+                            <option value="Endurance-Class Explorer">Endurance-Class Explorer — Long-haul intergalactic cruiser</option>
+                            <option value="Nebula-Class Cruiser">Nebula-Class Cruiser — Nebula observation and research</option>
+                            <option value="Scientific Surveyor">Scientific Surveyor — Deep-space data collection</option>
+                            <option value="Deep Void Dreadnought">Deep Void Dreadnought — Extreme range explorer</option>
+                            <option value="Event Horizon Diver">Event Horizon Diver — Black hole approach specialist</option>
+                            <option value="Quantum Skiff">Quantum Skiff — Temporal distortion capable</option>
+                            <option value="Colony Ship">Colony Ship — Mass passenger transport</option>
+                            <option value="Light Freighter">Light Freighter — Cargo and mixed-use</option>
+                            <option value="Armored Dreadnought">Armored Dreadnought — High-risk zone transit</option>
+                            <option value="Heart of Gold">Heart of Gold — Experimental infinite-improbability drive</option>
+                            <option value="Solar Sailer">Solar Sailer — Radiation-propelled luxury craft</option>
                         </select>
                         <span class="error-message" id="error-spacecraft">Please select a spacecraft.</span>
                     </div>
@@ -58,15 +67,15 @@
                         <div class="radio-group">
                             <label class="radio-label">
                                 <input type="radio" name="travel-class" value="economy">
-                                Economy
+                                Economy — Standard berth
                             </label>
                             <label class="radio-label">
                                 <input type="radio" name="travel-class" value="business">
-                                Business
+                                Business — Premium cabin
                             </label>
                             <label class="radio-label">
                                 <input type="radio" name="travel-class" value="first-class">
-                                First Class
+                                First Class — Luxury suite
                             </label>
                         </div>
                         <span class="error-message" id="error-class">Please select a travel class.</span>
