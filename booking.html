@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Journey | Interstellar Agency</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/global.css">
+</head>
+<body>
+
+    <main id="main-content">
+        <section class="booking-section">
+            <div class="booking-card" id="booking-card">
+                <h2>Book Your Journey</h2>
+                <p class="form-subtitle">Fill in the details below and we'll chart your course.</p>
+
+                <form id="booking-form" novalidate>
+                    <!-- 1. Text Field -->
+                    <div class="form-group" id="field-name">
+                        <label for="traveler-name">Traveler Name</label>
+                        <input type="text" id="traveler-name" name="traveler-name" placeholder="e.g. Cmdr. Sarah Novak">
+                        <span class="error-message" id="error-name">Please enter your full name.</span>
+                    </div>
+
+                    <!-- 2. Email Field -->
+                    <div class="form-group" id="field-email">
+                        <label for="contact-email">Contact Address</label>
+                        <input type="email" id="contact-email" name="contact-email" placeholder="e.g. sarah@deepspace.org">
+                        <span class="error-message" id="error-email">Please enter a valid email address.</span>
+                    </div>
+
+                    <!-- 3. Select Dropdown -->
+                    <div class="form-group" id="field-spacecraft">
+                        <label for="spacecraft">Preferred Spacecraft</label>
+                        <select id="spacecraft" name="spacecraft">
+                            <option value="">— Select a vessel —</option>
+                            <option value="odyssey-x">Odyssey X — Long-haul cruiser</option>
+                            <option value="comet-flyer">Comet Flyer — Fast recon craft</option>
+                            <option value="void-drifter">Void Drifter — Stealth explorer</option>
+                            <option value="stellar-clipper">Stellar Clipper — Luxury liner</option>
+                        </select>
+                        <span class="error-message" id="error-spacecraft">Please select a spacecraft.</span>
+                    </div>
+
+                    <!-- 4. Radio Buttons (Travel Class) -->
+                    <div class="form-group" id="field-class">
+                        <label>Travel Class</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="travel-class" value="economy">
+                                Economy
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="travel-class" value="business">
+                                Business
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="travel-class" value="first-class">
+                                First Class
+                            </label>
+                        </div>
+                        <span class="error-message" id="error-class">Please select a travel class.</span>
+                    </div>
+
+                    <!-- 5. Checkboxes (Add-ons) -->
+                    <div class="form-group" id="field-addons">
+                        <label>Add-ons (Optional)</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="addons" value="spacewalk-gear">
+                                Spacewalk Gear
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="addons" value="cryo-sleep">
+                                Cryo-Sleep Pod
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="addons" value="zero-g-tour">
+                                Zero-G Tour
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 6. Textarea -->
+                    <div class="form-group" id="field-medical">
+                        <label for="special-requirements">Special Dietary / Medical Requirements</label>
+                        <textarea id="special-requirements" name="special-requirements" placeholder="List any dietary restrictions, medical conditions, or special requests…"></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Launch Inquiry</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/app.js"></script>
+    <script src="js/validation.js"></script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destinations | Interstellar Agency</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/global.css">
+</head>
+<body>
+
+    <main id="main-content">
+        <!-- PAGE HEADER -->
+        <div class="page-header">
+            <h1>Explore the Cosmos</h1>
+            <p>Filter across six regions of deep space. Each category holds wonders beyond imagination.</p>
+        </div>
+
+        <!-- FILTER BAR -->
+        <section class="section-block" style="padding-top: 0;">
+            <div class="container">
+                <div class="filter-bar" id="filter-bar">
+                    <button class="filter-btn active" data-category="all">All</button>
+                    <button class="filter-btn" data-category="nebulas">Nebulas</button>
+                    <button class="filter-btn" data-category="stars">Stars</button>
+                    <button class="filter-btn" data-category="natural-satellites">Natural Satellites</button>
+                    <button class="filter-btn" data-category="non-habitable-planets">Non-Habitable Planets</button>
+                    <button class="filter-btn" data-category="habitable-planets">Habitable Planets</button>
+                    <button class="filter-btn" data-category="black-holes">Black Holes</button>
+                </div>
+
+                <div id="destinations-grid" class="destination-grid">
+                    <!-- Cards rendered dynamically by app.js -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

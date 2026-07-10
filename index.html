@@ -3,181 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canon Hub | Discover The Biggest Hits</title>
-    
-    <link rel="icon" href="images/favicon.png" type="image/png">
-    
-    <link rel="stylesheet" href="css/style.css">
+    <title>Interstellar Agency | Explore the Unknown</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/global.css">
 </head>
 <body>
 
-    <header id="main-header">
-        <div class="header-container">
-            <div class="logo-wrapper">
-                <img src="images/logo.png" alt="Canon Hub Logo" id="site-logo">
-            </div>
-            
-            <nav id="main-nav">
-                <button class="nav-btn active" data-category="All">HOME</button>
-                <button class="nav-btn" data-category="Action">ACTION</button>
-                <button class="nav-btn" data-category="Comedy">COMEDY</button>
-                <button class="nav-btn" data-category="Drama">DRAMA</button>
-                <button class="nav-btn" data-category="Science Fiction">SCI-FI</button>
-                <button class="nav-btn" data-category="Animation">ANIMATION</button>
-            </nav>
-            
-            <button id="signin-btn">[SIGN IN]</button>
-        </div>
-    </header>
-
-    <section id="search-section">
-        <div class="search-container">
-            <span class="search-icon">&#128269;</span>
-            <input type="text" id="searchInput" placeholder='SEARCH FOR MOVIES... " ">'>
-        </div>
-    </section>
-
-    <main id="app-container">
-        
-        <section id="hero-section">
-            <div class="hero-banner">
-                <div class="hero-content">
-                    <h2>"DISCOVER THE WORLD OF CANON HUB"</h2>
-                    <p>Discover the biggest hits, write reviews, and explore the cinematic universe.</p>
-                </div>
-            </div>
-            
-            <div class="featured-header">
-                <h3>Recommended Movies</h3>
-                <hr class="section-divider">
-            </div>
-
-            <div class="featured-movies-container no-scrollbar">
-                <div class="featured-card">
-                    <img src="images/dune-2.jpg" alt="Dune: Part Two">
-                    <h3>DUNE: PART TWO</h3>
-                    <p>CURRENT MONTH HIT</p>
-                </div>
-                <div class="featured-card">
-                    <img src="images/the-dark-knight.jpg" alt="The Dark Knight">
-                    <h3>THE DARK KNIGHT</h3>
-                    <p>BLOCKBUSTER FAVORITE</p>
-                </div>
-                <div class="featured-card">
-                    <img src="images/interstellar-drama.jpg" alt="Interstellar">
-                    <h3>INTERSTELLAR</h3>
-                    <p>FAMOUS HIT</p>
-                </div>
-                <div class="featured-card">
-                    <img src="images/mad-max-fury-road.jpg" alt="Mad Max: Fury Road">
-                    <h3>MAD MAX: FURY ROAD</h3>
-                    <p>SEASON HIGHLIGHT</p>
-                </div>
+    <main id="main-content">
+        <!-- HERO SECTION -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">Explore the Unknown</h1>
+                <p class="hero-subtitle">
+                    Journey beyond the edge of known space. From the fiery hearts of nebulas
+                    to the silent event horizons of black holes — book your passage to the cosmos.
+                </p>
+                <a href="destinations.html" class="hero-cta">Begin Your Journey</a>
             </div>
         </section>
 
-        <section id="movies-section" class="content-section">
-            <div class="grid-header">
-                <h2 id="category-title">[DYNAMIC MOVIE GRID]</h2>
-                <button class="grid-view-btn">GRID VIEW: 100% WIDTH</button>
-            </div>
-            
-            <p class="grid-desc">*Hover effects/pop-up functionality is applied per progressively loaded tile container layout.</p>
-            
-            <div id="movie-grid"></div>
-        </section>
-
-        <section id="review-section" class="content-section">
-            <div class="form-container">
-                <h2>[USER REVIEW SUBMISSION]</h2>
-                <p>Submit a review directly to the database from this skeletal form layout</p>
-                
-                <form id="reviewForm">
-                    <div id="formMessage" class="hidden-message"></div>
-
-                    <div class="form-group">
-                        <label for="reviewerName">[YOUR NAME]</label>
-                        <input type="text" id="reviewerName" placeholder="[TEXT INPUT BOX]">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="reviewerEmail">[EMAIL]</label>
-                        <input type="text" id="reviewerEmail" placeholder="[TEXT INPUT BOX]">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="reviewMovie">[SELECT MOVIE]</label>
-                        <select id="reviewMovie">
-                            <option value="none">[DROPDOWN SELECT BOX]</option>
-                            <option value="m1">Spider-Man: Brand New Day</option>
-                            <option value="m46">Dune: Part Two</option>
-                            <option value="m6">The Dark Knight</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>[STAR RATING (1-5)]</label>
-                        <div class="star-rating">
-                            <input type="radio" id="star5" name="rating" value="5"><label for="star5">&#9733;</label>
-                            <input type="radio" id="star4" name="rating" value="4"><label for="star4">&#9733;</label>
-                            <input type="radio" id="star3" name="rating" value="3"><label for="star3">&#9733;</label>
-                            <input type="radio" id="star2" name="rating" value="2"><label for="star2">&#9733;</label>
-                            <input type="radio" id="star1" name="rating" value="1"><label for="star1">&#9733;</label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="reviewText">[YOUR REVIEW]</label>
-                        <textarea id="reviewText" rows="4" placeholder="[LARGE TEXTAREA BOX]"></textarea>
-                    </div>
-
-                    <div class="form-group checkbox-group">
-                        <input type="checkbox" id="newsletter">
-                        <label for="newsletter">Subscribe to weekly updates.</label>
-                    </div>
-
-                    <button type="submit" id="submitBtn">[SUBMIT REVIEW]</button>
-                </form>
+        <!-- FEATURED PACKAGES SECTION -->
+        <section id="packages" class="section-block">
+            <div class="container">
+                <h2 class="section-title">Featured Voyages</h2>
+                <p class="section-subtitle">Curated expeditions for the daring explorer</p>
+                <div id="featured-grid" class="destination-grid">
+                    <!-- Packages injected dynamically by app.js -->
+                </div>
             </div>
         </section>
-
     </main>
 
-    <footer id="main-footer">
-        <div class="footer-container">
-            <p class="copyright">&copy; 2026 CANON HUB. ALL RIGHTS RESERVED. SKELETAL WIREFRAME V1.0</p>
-            
-            <div class="footer-links">
-                <a href="#">[FAQ]</a>
-                <a href="#">[CONTACT]</a>
-                <a href="#">[ABOUT]</a>
-            </div>
-
-            <div class="social-links">
-                <a href="#">[TWITTER]</a>
-                <a href="#">[YOUTUBE]</a>
-            </div>
-        </div>
-    </footer>
-
-    <div id="movie-modal" class="modal-hidden">
-        <div class="modal-content">
-            <span id="close-modal" class="close-btn">&times;</span>
-            <div class="video-container">
-                <iframe id="trailer-iframe" src="" frameborder="0" allowfullscreen></iframe>
-            </div>
-            <div class="modal-info">
-                <h2 id="modal-title">Movie Title</h2>
-                <div class="modal-meta">
-                    <p><strong>Genre:</strong> <span id="modal-genre"></span></p>
-                    <p><strong>Year:</strong> <span id="modal-year"></span></p>
-                    <p><strong>Rating:</strong> &#9733; <span id="modal-rating"></span>/10</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script type="module" src="js/main.js"></script>
-    <script type="module" src="js/validation.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>
