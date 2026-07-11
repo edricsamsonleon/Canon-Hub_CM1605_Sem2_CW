@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <strong>Class:</strong> ${classLabel}
                     ${addonLabels.length ? `<br><strong>Add-ons:</strong> ${addonLabels.join(', ')}` : ''}
                 </p>
-                <p style="margin-top: 24px; font-style: italic; color: var(--accent-teal);">
+                <p style="margin-top: 24px; font-style: italic;">
                     The stars await. Safe travels.
                 </p>
             </div>

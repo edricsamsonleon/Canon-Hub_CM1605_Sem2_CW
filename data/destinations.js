@@ -1,4 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
+/* destinations.js — DATA embedded from destinations.xml so the site runs
+   directly from a file (file://). Parsed by app.js with DOMParser.
+   Must begin with <?xml (no leading blank line). */
+const DESTINATIONS_XML = `<?xml version="1.0" encoding="UTF-8"?>
 <interstellarAgency>
     <destinations>
         <destination id="BLK-01">
@@ -1461,4 +1464,4 @@
             <speed>18</speed>
         </spaceship>
     </spaceships>
-</interstellarAgency>
+</interstellarAgency>`;

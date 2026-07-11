@@ -128,3 +128,31 @@ assets/images/pkg15.jpg  → The Ultimate Completionist
 Total: 105 images
 File format: .jpg (or change extension in XML if using .png/.webp)
 Action: Drop these into assets/images/ and they'll appear on the site automatically.
+## 3. SPACESHIP IMAGES (15 files)  [included]
+assets/images/ship01.jpg → Endurance-Class Explorer
+assets/images/ship02.jpg → Nebula-Class Cruiser
+assets/images/ship03.jpg → Event Horizon Diver
+assets/images/ship04.jpg → Quantum Skiff
+assets/images/ship05.jpg → Deep Void Dreadnought
+assets/images/ship06.jpg → Solar Sailer
+assets/images/ship07.jpg → Colony Ark
+assets/images/ship08.jpg → Heart of Gold
+assets/images/ship09.jpg → Standard Explorer
+assets/images/ship10.jpg → Light Courier
+assets/images/ship11.jpg → Scientific Surveyor
+assets/images/ship12.jpg → Cryo-Skiff
+assets/images/ship13.jpg → Hyper-Relay Cruiser
+assets/images/ship14.jpg → Stealth Frigate
+assets/images/ship15.jpg → Armored Dreadnought
+
+## 4. CATEGORY FALLBACK IMAGES (6 files)  [included]
+# Shown on a destination card until you add its own blkNN/habNN/etc. image.
+assets/images/cat-black-holes.jpg
+assets/images/cat-habitable-planets.jpg
+assets/images/cat-non-habitable-planets.jpg
+assets/images/cat-natural-satellites.jpg
+assets/images/cat-stars.jpg
+assets/images/cat-nebulas.jpg
+
+## 5. PACKAGE / JOURNEY IMAGES (4 files, cycled across packages)  [included]
+assets/images/journey01.jpg  journey02.jpg  journey03.jpg  journey04.jpg

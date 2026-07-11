@@ -4,114 +4,142 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book a Journey | Interstellar Agency</title>
+    <meta name="keywords" content="space travel, interstellar travel, space tourism, exoplanets, black holes, nebulas, spaceships, space packages, Orion Apex, Interstellar Agency">
+    <meta name="author" content="Interstellar Agency (Orion Apex)">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#000000">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Interstellar Agency">
+    <meta property="og:title" content="Book a Journey | Interstellar Agency">
+    <meta property="og:description" content="Request a premium interstellar travel consultation with our booking inquiry form.">
+    <meta property="og:image" content="assets/images/journey01.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Book a Journey | Interstellar Agency">
+    <meta name="twitter:description" content="Request a premium interstellar travel consultation with our booking inquiry form.">
+    <meta name="description" content="Request a premium interstellar travel consultation with our booking inquiry form.">
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>(function(){try{if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');}catch(e){}})();</script>
 
-    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-
-    <!-- Stylesheet -->
     <link rel="stylesheet" href="css/global.css">
 </head>
 <body>
 
+    <!-- Header injected by app.js -->
+
     <main id="main-content">
         <section class="booking-section">
-            <div class="booking-card" id="booking-card">
-                <h2>Book Your Journey</h2>
-                <p class="form-subtitle">Choose your vessel, class, and destinations. We'll chart your course across the cosmos.</p>
+            <div class="booking-wrap">
 
-                <form id="booking-form" novalidate>
-                    <!-- 1. Text Field -->
-                    <div class="form-group" id="field-name">
-                        <label for="traveler-name">Traveler Name</label>
-                        <input type="text" id="traveler-name" name="traveler-name" placeholder="e.g. Cmdr. Sarah Novak">
-                        <span class="error-message" id="error-name">Please enter your full name.</span>
+                <div class="booking-intro">
+                    <h1>Booking Inquiry</h1>
+                    <p>
+                        Complete the inquiry form below to request a premium interstellar travel
+                        consultation. The layout is organised in clear steps for easy review.
+                    </p>
+                </div>
+
+                <div class="booking-card" id="booking-card">
+
+                    <div class="booking-card-head">
+                        <h2>Passenger Request Details</h2>
                     </div>
 
-                    <!-- 2. Email Field -->
-                    <div class="form-group" id="field-email">
-                        <label for="contact-email">Contact Address</label>
-                        <input type="email" id="contact-email" name="contact-email" placeholder="e.g. sarah@deepspace.org">
-                        <span class="error-message" id="error-email">Please enter a valid email address.</span>
-                    </div>
+                    <!-- novalidate turns OFF the browser's built-in validation,
+                         because ALL validation is done by our own validation.js. -->
+                    <form id="booking-form" novalidate>
+                        <div class="booking-body">
 
-                    <!-- 3. Select Dropdown — ships from XML data -->
-                    <div class="form-group" id="field-spacecraft">
-                        <label for="spacecraft">Preferred Spacecraft</label>
-                        <select id="spacecraft" name="spacecraft">
-                            <option value="">— Select a vessel —</option>
-                            <option value="Standard Explorer">Standard Explorer — General purpose, short-range</option>
-                            <option value="Light Courier">Light Courier — Fast, light cargo and passengers</option>
-                            <option value="Endurance-Class Explorer">Endurance-Class Explorer — Long-haul intergalactic cruiser</option>
-                            <option value="Nebula-Class Cruiser">Nebula-Class Cruiser — Nebula observation and research</option>
-                            <option value="Scientific Surveyor">Scientific Surveyor — Deep-space data collection</option>
-                            <option value="Deep Void Dreadnought">Deep Void Dreadnought — Extreme range explorer</option>
-                            <option value="Event Horizon Diver">Event Horizon Diver — Black hole approach specialist</option>
-                            <option value="Quantum Skiff">Quantum Skiff — Temporal distortion capable</option>
-                            <option value="Colony Ship">Colony Ship — Mass passenger transport</option>
-                            <option value="Light Freighter">Light Freighter — Cargo and mixed-use</option>
-                            <option value="Armored Dreadnought">Armored Dreadnought — High-risk zone transit</option>
-                            <option value="Heart of Gold">Heart of Gold — Experimental infinite-improbability drive</option>
-                            <option value="Solar Sailer">Solar Sailer — Radiation-propelled luxury craft</option>
-                        </select>
-                        <span class="error-message" id="error-spacecraft">Please select a spacecraft.</span>
-                    </div>
+                            <!-- SECTION 1: TRAVELER INFORMATION -->
+                            <div class="form-section">
+                                <div class="form-section-title">
+                                    <span class="step-num">1</span>
+                                    <h3>Traveler Information</h3>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group" id="field-name">
+                                        <label for="traveler-name">Traveler Name</label>
+                                        <input type="text" id="traveler-name" name="traveler-name" placeholder="Enter full traveler name">
+                                        <span class="error-message" id="error-name">Please enter your full name.</span>
+                                    </div>
+                                    <div class="form-group" id="field-email">
+                                        <label for="contact-email">Contact Address</label>
+                                        <input type="email" id="contact-email" name="contact-email" placeholder="Enter contact email address">
+                                        <span class="error-message" id="error-email">Please enter a valid email address.</span>
+                                    </div>
+                                </div>
+                            </div>
 
-                    <!-- 4. Radio Buttons (Travel Class) -->
-                    <div class="form-group" id="field-class">
-                        <label>Travel Class</label>
-                        <div class="radio-group">
-                            <label class="radio-label">
-                                <input type="radio" name="travel-class" value="economy">
-                                Economy — Standard berth
-                            </label>
-                            <label class="radio-label">
-                                <input type="radio" name="travel-class" value="business">
-                                Business — Premium cabin
-                            </label>
-                            <label class="radio-label">
-                                <input type="radio" name="travel-class" value="first-class">
-                                First Class — Luxury suite
-                            </label>
+                            <!-- SECTION 2: JOURNEY PREFERENCES -->
+                            <div class="form-section">
+                                <div class="form-section-title">
+                                    <span class="step-num">2</span>
+                                    <h3>Journey Preferences</h3>
+                                </div>
+                                <div class="form-group" id="field-spacecraft">
+                                    <label for="spacecraft">Preferred Spacecraft</label>
+                                    <select id="spacecraft" name="spacecraft">
+                                        <option value="">Select preferred spacecraft</option>
+                                        <option value="Standard Explorer">Standard Explorer — General purpose, short-range</option>
+                                        <option value="Light Courier">Light Courier — Fast, light cargo and passengers</option>
+                                        <option value="Endurance-Class Explorer">Endurance-Class Explorer — Long-haul intergalactic cruiser</option>
+                                        <option value="Nebula-Class Cruiser">Nebula-Class Cruiser — Nebula observation and research</option>
+                                        <option value="Scientific Surveyor">Scientific Surveyor — Deep-space data collection</option>
+                                        <option value="Deep Void Dreadnought">Deep Void Dreadnought — Extreme range explorer</option>
+                                        <option value="Event Horizon Diver">Event Horizon Diver — Black hole approach specialist</option>
+                                        <option value="Quantum Skiff">Quantum Skiff — Temporal distortion capable</option>
+                                        <option value="Colony Ship">Colony Ship — Mass passenger transport</option>
+                                        <option value="Solar Sailer">Solar Sailer — Radiation-propelled luxury craft</option>
+                                    </select>
+                                    <span class="error-message" id="error-spacecraft">Please select a spacecraft.</span>
+                                </div>
+                                <div class="form-group" id="field-class">
+                                    <label>Class of Travel</label>
+                                    <div class="radio-group">
+                                        <label class="radio-label"><input type="radio" name="travel-class" value="economy"> Economy</label>
+                                        <label class="radio-label"><input type="radio" name="travel-class" value="business"> Business</label>
+                                        <label class="radio-label"><input type="radio" name="travel-class" value="first-class"> First Class</label>
+                                    </div>
+                                    <span class="error-message" id="error-class">Please select a travel class.</span>
+                                </div>
+                            </div>
+
+                            <!-- SECTION 3: ADD-ONS & NOTES -->
+                            <div class="form-section">
+                                <div class="form-section-title">
+                                    <span class="step-num">3</span>
+                                    <h3>Add-ons &amp; Notes</h3>
+                                </div>
+                                <div class="form-group" id="field-addons">
+                                    <label>Journey Add-ons (optional)</label>
+                                    <div class="checkbox-group">
+                                        <label class="checkbox-label"><input type="checkbox" name="addons" value="spacewalk-gear"> Spacewalk Gear</label>
+                                        <label class="checkbox-label"><input type="checkbox" name="addons" value="cryo-sleep"> Cryo-Sleep Pod</label>
+                                        <label class="checkbox-label"><input type="checkbox" name="addons" value="observation-deck"> Panoramic Observation Deck Access</label>
+                                    </div>
+                                </div>
+                                <div class="form-group" id="field-medical">
+                                    <label for="special-requirements">Special Requirements or Dietary Needs</label>
+                                    <textarea id="special-requirements" name="special-requirements"
+                                              placeholder="Provide any accessibility requests, medical notes, meal preferences, or mission-specific requirements here."></textarea>
+                                </div>
+                            </div>
+
                         </div>
-                        <span class="error-message" id="error-class">Please select a travel class.</span>
-                    </div>
 
-                    <!-- 5. Checkboxes (Add-ons) -->
-                    <div class="form-group" id="field-addons">
-                        <label>Add-ons (Optional)</label>
-                        <div class="checkbox-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="addons" value="spacewalk-gear">
-                                Spacewalk Gear
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="addons" value="cryo-sleep">
-                                Cryo-Sleep Pod
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="addons" value="zero-g-tour">
-                                Zero-G Tour
-                            </label>
+                        <div class="booking-card-foot">
+                            <p class="advisor-note">All inquiry details are reviewed by a licensed interstellar travel advisor.</p>
+                            <button type="submit" class="submit-btn">Submit Inquiry</button>
                         </div>
-                    </div>
-
-                    <!-- 6. Textarea -->
-                    <div class="form-group" id="field-medical">
-                        <label for="special-requirements">Special Dietary / Medical Requirements</label>
-                        <textarea id="special-requirements" name="special-requirements" placeholder="List any dietary restrictions, medical conditions, or special requests…"></textarea>
-                    </div>
-
-                    <button type="submit" class="submit-btn">Launch Inquiry</button>
-                </form>
+                    </form>
+                </div>
             </div>
         </section>
     </main>
 
+    <!-- Footer injected by app.js -->
+
+    <script src="data/destinations.js"></script>
     <script src="js/app.js"></script>
     <script src="js/validation.js"></script>
 </body>

@@ -4,66 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interstellar Agency | Explore the Unknown</title>
-
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Favicon -->
+    <meta name="keywords" content="space travel, interstellar travel, space tourism, exoplanets, black holes, nebulas, spaceships, space packages, Orion Apex, Interstellar Agency">
+    <meta name="author" content="Interstellar Agency (Orion Apex)">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#000000">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Interstellar Agency">
+    <meta property="og:title" content="Interstellar Agency | Explore the Unknown">
+    <meta property="og:description" content="Premium interstellar travel — 90 destinations, 15 packages and a fleet of 15 spaceships.">
+    <meta property="og:image" content="assets/images/journey01.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Interstellar Agency | Explore the Unknown">
+    <meta name="twitter:description" content="Premium interstellar travel — 90 destinations, 15 packages and a fleet of 15 spaceships.">
+    <meta name="description" content="Premium interstellar travel — 90 destinations, 15 packages and a fleet of 15 spaceships.">
+    <script>(function(){try{if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');}catch(e){}})();</script>
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-
-    <!-- Stylesheet -->
     <link rel="stylesheet" href="css/global.css">
+    <script type="application/ld+json">
+    {"@context": "https://schema.org", "@type": "TravelAgency", "name": "Interstellar Agency", "description": "Premium interstellar travel agency offering guided journeys to 90 destinations across six cosmic categories aboard a fleet of 15 spaceships.", "url": "index.html", "logo": "assets/logo.png", "image": "assets/images/journey01.jpg", "areaServed": "The observable universe", "knowsAbout": ["interstellar travel", "exoplanets", "black holes", "nebulas", "natural satellites", "spaceships"]}
+    </script>
 </head>
 <body>
 
+    <!-- Header injected by app.js -->
+
     <main id="main-content">
-        <!-- HERO SECTION -->
+
+        <!-- HERO — full-screen background video (full colour) -->
         <section class="hero">
+            <video class="hero-video" autoplay muted loop playsinline poster="assets/example.jpg">
+                <source src="assets/Spaceflight.mp4" type="video/mp4">
+            </video>
+            <div class="hero-overlay"></div>
             <div class="hero-content">
                 <h1 class="hero-title">Explore the Unknown</h1>
                 <p class="hero-subtitle">
-                    Over 90 verified destinations across six cosmic categories.
-                    From the fiery hearts of nebulas to the silent event horizons
-                    of black holes — your passage to the stars awaits.
+                    Over 90 verified destinations, 15 curated packages and a fleet of 15 spaceships —
+                    from the fiery hearts of nebulas to the silent event horizons of black holes.
                 </p>
-                <a href="destinations.html" class="hero-cta">Begin Your Journey</a>
-            </div>
-        </section>
-
-        <!-- FEATURED PACKAGES SECTION -->
-        <section id="packages" class="section-block">
-            <div class="container">
-                <h2 class="section-title">Featured Voyages</h2>
-                <p class="section-subtitle">15 curated packages — each spanning every corner of known space</p>
-                <div id="featured-grid" class="destination-grid">
-                    <!-- Packages injected dynamically by app.js -->
+                <div class="hero-actions">
+                    <a href="destinations.html" class="btn">Explore Destinations</a>
+                    <a href="packages.html" class="btn">View Packages</a>
                 </div>
             </div>
+            <span class="hero-scroll">Scroll to explore</span>
         </section>
 
-        <!-- QUICK STATS SECTION -->
+        <!-- QUICK STATS (kept above the featured section) -->
         <section class="section-block">
             <div class="container">
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-lg); text-align: center;">
-                    <div>
-                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-cyan);">90</div>
-                        <div style="color: var(--text-secondary); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px;">Destinations</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-cyan);">15</div>
-                        <div style="color: var(--text-secondary); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px;">Curated Packages</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-cyan);">6</div>
-                        <div style="color: var(--text-secondary); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px;">Cosmic Categories</div>
-                    </div>
+                <div class="stats-grid">
+                    <div class="stat"><div class="stat-number">90</div><div class="stat-label">Destinations</div></div>
+                    <div class="stat"><div class="stat-number">15</div><div class="stat-label">Curated Packages</div></div>
+                    <div class="stat"><div class="stat-number">6</div><div class="stat-label">Cosmic Categories</div></div>
                 </div>
+            </div>
+        </section>
+
+        <!-- FREQUENTLY VISITED — curated mix of famous packages + destinations -->
+        <section id="packages" class="section-block" style="padding-top: 0;">
+            <div class="container">
+                <div class="section-head">
+                    <h2 class="section-title">Frequently Visited Travel Packages and Places</h2>
+                </div>
+                <div id="featured-grid" class="destination-grid"></div>
             </div>
         </section>
     </main>
 
+    <!-- Footer injected by app.js -->
+
+    <script src="data/destinations.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>
