@@ -24,10 +24,10 @@ img.img-pending {
 img.img-ready {
     opacity: 1;
 }
+/* Placeholder plates for catalogue media only — never on the nav logo */
 .card-img,
 .detail-media,
-.stop-img,
-.nav-logo {
+.stop-img {
     background: rgba(128, 128, 128, 0.12);
 }
 
@@ -151,9 +151,19 @@ img { max-width: 100%; display: block; }
     justify-content: space-between;
     gap: var(--sp-md);
 }
-.nav-logo { display: flex; align-items: center; }
-.nav-logo-img { height: 38px; width: auto; }
-/* The logo file is white; invert it to black when the light theme is on */
+.nav-logo {
+    display: flex;
+    align-items: center;
+    background: transparent;
+    line-height: 0;
+}
+.nav-logo-img {
+    height: 38px;
+    width: auto;
+    display: block;
+    background: transparent;
+}
+/* The logo file is white-on-transparent; invert to black in light theme */
 :root.light .nav-logo-img { filter: invert(1); }
 
 .nav-actions { display: flex; align-items: center; gap: var(--sp-lg); }
@@ -237,23 +247,34 @@ img { max-width: 100%; display: block; }
 
 /* =========================================
    5. HERO — full-screen background video (shown in full colour)
+   Full-bleed under the fixed header so there is no gap strip on Home.
 ========================================= */
+/* Home: drop body offset; hero itself clears the header for text */
+body:has(.hero) {
+    padding-top: 0;
+}
 .hero {
     position: relative;
-    min-height: calc(100vh - var(--header-h));
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     overflow: hidden;
-    padding: var(--sp-xl) var(--sp-md);
+    /* top padding = header height so title sits below nav; video still fills to top */
+    padding: calc(var(--header-h) + var(--sp-lg)) var(--sp-md) var(--sp-xl);
     background: #000;                     /* fallback + always-dark hero */
+    margin: 0;
 }
 .hero-video {
     position: absolute; inset: 0;
     width: 100%; height: 100%;
     object-fit: cover;                    /* full colour — imagery keeps its colour */
     z-index: 0;
+    display: block;
+    margin: 0;
+    border: 0;
+    background: #000;
 }
 .hero-overlay {
     position: absolute; inset: 0; z-index: 1;
@@ -280,9 +301,17 @@ img { max-width: 100%; display: block; }
 .hero .btn { color: #fff; border-color: #fff; }
 .hero .btn:hover { background: #fff; color: #000; }
 .hero-scroll {
-    position: absolute; bottom: 24px; left: 50%;
-    transform: translateX(-50%); z-index: 2;
-    color: #fff; font-size: 0.72rem; letter-spacing: 3px; text-transform: uppercase;
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    color: #fff;
+    font-size: 0.72rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    pointer-events: none;
 }
 
 
