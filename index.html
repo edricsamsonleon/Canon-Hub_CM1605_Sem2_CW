@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+s<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -17,8 +17,11 @@
     <meta name="twitter:title" content="Interstellar Agency | Explore the Unknown">
     <meta name="twitter:description" content="Premium interstellar travel — 90 destinations, 15 packages and a fleet of 15 spaceships.">
     <meta name="description" content="Premium interstellar travel — 90 destinations, 15 packages and a fleet of 15 spaceships.">
-    <script>(function(){try{if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');}catch(e){}})();</script>
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <!-- Theme + reveal: apply saved theme before paint; reveal body after JS builds header (or after 2s safety). -->
+    <script>(function(){try{if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');}catch(e){}setTimeout(function(){document.documentElement.classList.add('app-ready');},2000);})();</script>
+    <style>html:not(.app-ready) body{visibility:hidden}</style>
+    <noscript><style>html body{visibility:visible!important}</style></noscript>
+    <link rel="icon" type="image/png" href="assets/favicon.png">
     <link rel="stylesheet" href="css/global.css">
     <script type="application/ld+json">
     {"@context": "https://schema.org", "@type": "TravelAgency", "name": "Interstellar Agency", "description": "Premium interstellar travel agency offering guided journeys to 90 destinations across six cosmic categories aboard a fleet of 15 spaceships.", "url": "index.html", "logo": "assets/logo.png", "image": "assets/images/journey01.jpg", "areaServed": "The observable universe", "knowsAbout": ["interstellar travel", "exoplanets", "black holes", "nebulas", "natural satellites", "spaceships"]}
@@ -32,9 +35,10 @@
 
         <!-- HERO — full-screen background video (full colour) -->
         <section class="hero">
-            <video class="hero-video" autoplay muted loop playsinline poster="assets/example.jpg">
-                <source src="assets/Spaceflight.mp4" type="video/mp4">
-            </video>
+            <!-- preload="none": do not download the ~40MB video during first paint.
+                 JS (initHeroVideo) attaches the source after the page is ready. -->
+            <video class="hero-video" muted loop playsinline preload="none" poster="assets/example.jpg"
+                   data-src="assets/Spaceflight.mp4"></video>
             <div class="hero-overlay"></div>
             <div class="hero-content">
                 <h1 class="hero-title">Explore the Unknown</h1>

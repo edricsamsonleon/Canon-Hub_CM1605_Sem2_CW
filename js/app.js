@@ -42,9 +42,7 @@ function buildNavigation() {
     header.className = 'site-header';
     header.innerHTML = `
         <div class="nav-container">
-            <a href="index.html" class="nav-logo" aria-label="Interstellar Agency home">
-                <img src="assets/logo.png" alt="Interstellar Agency" class="nav-logo-img">
-            </a>
+            <a href="index.html" class="nav-logo" aria-label="Interstellar Agency home"></a>
             <div class="nav-actions">
                 <nav class="nav-menu" role="navigation">
                     <ul class="nav-links">
@@ -65,6 +63,17 @@ function buildNavigation() {
                 </button>
             </div>
         </div>`;
+
+    const logoLink = header.querySelector('.nav-logo');
+    const logoImg = document.createElement('img');
+    logoImg.src = 'assets/logo.png';
+    logoImg.alt = 'Interstellar Agency';
+    logoImg.className = 'nav-logo-img';
+    logoImg.decoding = 'async';
+    markImagePending(logoImg);
+    logoImg.addEventListener('load', () => markImageReady(logoImg));
+    logoImg.addEventListener('error', () => markImageReady(logoImg));
+    logoLink.appendChild(logoImg);
 
     const toggleBtn = header.querySelector('.nav-toggle');
     const navMenu = header.querySelector('.nav-menu');
@@ -215,11 +224,76 @@ function starRating(rating, reviews) {
         <span class="rating-num">${r.toFixed(1)}</span>${reviews ? ` <span class="rating-count">(${reviews} reviews)</span>` : ''}</div>`;
 }
 
-/* <img> that tries the real image, then a fallback, then the placeholder. */
-function imgWithFallback(primary, fallback, alt) {
-    const src = primary && primary.length ? primary : fallback;
-    return `<img src="${src}" alt="${alt}" loading="lazy"
-        onerror="this.onerror=null; this.src='${fallback}'; this.onerror=function(){this.onerror=null; this.src='${PLACEHOLDER_IMAGE}';};">`;
+/* Mark an image invisible until a real bitmap has loaded (stops alt-text flash). */
+function markImagePending(img) {
+    img.classList.add('img-pending');
+    img.classList.remove('img-ready');
+}
+
+function markImageReady(img) {
+    img.classList.remove('img-pending');
+    img.classList.add('img-ready');
+    img.dispatchEvent(new Event('img-settled'));
+}
+
+/* Create an <img> with a fallback chain. Uses addEventListener('error') —
+   never inline onerror — so HTML stays free of JavaScript handlers.
+   Stays hidden until a source in the chain loads successfully. */
+function createImageWithFallback(primary, fallback, alt) {
+    const img = document.createElement('img');
+    img.alt = alt || '';
+    /* Eager: load while the page is still hidden behind app-ready */
+    img.loading = 'eager';
+    img.decoding = 'async';
+    markImagePending(img);
+
+    const first = primary && primary.length ? primary : fallback;
+    const chain = [];
+    if (first) chain.push(first);
+    if (fallback && fallback !== first) chain.push(fallback);
+    if (PLACEHOLDER_IMAGE !== first && PLACEHOLDER_IMAGE !== fallback) chain.push(PLACEHOLDER_IMAGE);
+    if (!chain.length) chain.push(PLACEHOLDER_IMAGE);
+
+    let step = 0;
+    img.addEventListener('load', () => markImageReady(img));
+    img.addEventListener('error', () => {
+        step += 1;
+        if (step < chain.length) {
+            markImagePending(img);
+            img.src = chain[step];
+        } else {
+            /* Last resort failed — still settle so the page can reveal */
+            markImageReady(img);
+        }
+    });
+    img.src = chain[0];
+    return img;
+}
+
+/* Wait until every <img> has settled (loaded or exhausted fallbacks), or timeout.
+   For images using the fallback helper, only 'img-settled' counts — not the first error. */
+function whenImagesReady(root, timeoutMs) {
+    const imgs = Array.from((root || document).querySelectorAll('img'));
+    if (!imgs.length) return Promise.resolve();
+
+    const waits = imgs.map(img => new Promise(resolve => {
+        if (img.classList.contains('img-ready')) return resolve();
+        if (img.complete && img.naturalWidth > 0) {
+            markImageReady(img);
+            return resolve();
+        }
+        img.addEventListener('img-settled', () => resolve(), { once: true });
+        /* Plain <img> (not in a fallback chain): settle on first load/error */
+        if (!img.classList.contains('img-pending')) {
+            img.addEventListener('load', () => { markImageReady(img); resolve(); }, { once: true });
+            img.addEventListener('error', () => { markImageReady(img); resolve(); }, { once: true });
+        }
+    }));
+
+    return Promise.race([
+        Promise.all(waits),
+        new Promise(resolve => setTimeout(resolve, timeoutMs || 4000)),
+    ]);
 }
 
 
@@ -230,9 +304,14 @@ function createDestinationCard(dest) {
     const card = document.createElement('article');
     card.className = 'destination-card';
     card.setAttribute('data-category', dest.category);
-    card.innerHTML = `
-        <div class="card-img">${imgWithFallback(dest.imagePath, categoryImage(dest.category), dest.name)}</div>
-        <div class="card-body">
+
+    const imgWrap = document.createElement('div');
+    imgWrap.className = 'card-img';
+    imgWrap.appendChild(createImageWithFallback(dest.imagePath, categoryImage(dest.category), dest.name));
+
+    const body = document.createElement('div');
+    body.className = 'card-body';
+    body.innerHTML = `
             <div class="card-head"><h3>${dest.name}</h3><span class="card-badge">${dest.category}</span></div>
             ${starRating(dest.rating, dest.reviews)}
             <p class="card-desc">${dest.description}</p>
@@ -241,17 +320,24 @@ function createDestinationCard(dest) {
                 <li><span class="spec-label">Required Ship</span><span class="spec-value">${dest.requiredShip}</span></li>
             </ul>
             <div class="card-foot"><span class="card-price">${formatPrice(dest.cost)}<small>per traveller</small></span>
-                <a href="booking.html" class="card-select">Select</a></div>
-        </div>`;
+                <a href="booking.html" class="card-select">Select</a></div>`;
+
+    card.appendChild(imgWrap);
+    card.appendChild(body);
     return card;
 }
 
 function createPackageCard(pkg, i) {
     const card = document.createElement('article');
     card.className = 'destination-card';
-    card.innerHTML = `
-        <div class="card-img">${imgWithFallback(pkg.imagePath, journeyImage(i), pkg.name)}</div>
-        <div class="card-body">
+
+    const imgWrap = document.createElement('div');
+    imgWrap.className = 'card-img';
+    imgWrap.appendChild(createImageWithFallback(pkg.imagePath, journeyImage(i), pkg.name));
+
+    const body = document.createElement('div');
+    body.className = 'card-body';
+    body.innerHTML = `
             <div class="card-head"><h3>${pkg.name}</h3><span class="card-badge">Package</span></div>
             ${starRating(pkg.rating, pkg.reviews)}
             <p class="card-desc">${pkg.description}</p>
@@ -260,17 +346,24 @@ function createPackageCard(pkg, i) {
                 <li><span class="spec-label">Stops</span><span class="spec-value">${pkg.stops.length} destinations</span></li>
             </ul>
             <div class="card-foot"><span class="card-price">${formatPrice(pkg.price)}<small>full journey</small></span>
-                <a href="package.html?id=${pkg.id}" class="card-select">Details</a></div>
-        </div>`;
+                <a href="package.html?id=${pkg.id}" class="card-select">Details</a></div>`;
+
+    card.appendChild(imgWrap);
+    card.appendChild(body);
     return card;
 }
 
 function createSpaceshipCard(ship, i) {
     const card = document.createElement('article');
     card.className = 'destination-card';
-    card.innerHTML = `
-        <div class="card-img">${imgWithFallback(ship.imagePath, PLACEHOLDER_IMAGE, ship.name)}</div>
-        <div class="card-body">
+
+    const imgWrap = document.createElement('div');
+    imgWrap.className = 'card-img';
+    imgWrap.appendChild(createImageWithFallback(ship.imagePath, PLACEHOLDER_IMAGE, ship.name));
+
+    const body = document.createElement('div');
+    body.className = 'card-body';
+    body.innerHTML = `
             <div class="card-head"><h3>${ship.name}</h3><span class="card-badge">${ship.shipClass}</span></div>
             ${starRating(ship.rating, ship.reviews)}
             <p class="card-desc">${ship.description}</p>
@@ -279,8 +372,10 @@ function createSpaceshipCard(ship, i) {
                 <li><span class="spec-label">Cruising Speed</span><span class="spec-value">${ship.speed} ly / hour</span></li>
             </ul>
             <div class="card-foot"><span class="card-price" style="font-size:.8rem;letter-spacing:1px">${ship.fuelSource}</span>
-                <a href="spaceship.html?id=${ship.id}" class="card-select">View Details</a></div>
-        </div>`;
+                <a href="spaceship.html?id=${ship.id}" class="card-select">View Details</a></div>`;
+
+    card.appendChild(imgWrap);
+    card.appendChild(body);
     return card;
 }
 
@@ -362,14 +457,6 @@ function initPackageDetail() {
     if (!pkg) { root.innerHTML = `<p class="grid-message">Package not found. <a href="packages.html">Back to all packages</a>.</p>`; return; }
 
     const stops = pkg.stops.map(s => data.destinations.find(d => d.id === s.id)).filter(Boolean);
-    const stopsHtml = stops.map(d => `
-        <article class="stop-card">
-            <div class="stop-img">${imgWithFallback(d.imagePath, categoryImage(d.category), d.name)}</div>
-            <div class="stop-body">
-                <div class="card-head"><h4>${d.name}</h4><span class="card-badge">${d.category}</span></div>
-                <p class="stop-meta">${d.lightYears} LY · ${d.requiredShip} · ${formatPrice(d.cost)}</p>
-            </div>
-        </article>`).join('');
 
     const faqs = [
         ['How long does this expedition take?', `The full journey lasts <strong>${pkg.totalDuration}</strong>.`],
@@ -385,7 +472,7 @@ function initPackageDetail() {
     root.innerHTML = `
         <a href="packages.html" class="back-link">← All packages</a>
         <div class="detail-hero">
-            <div class="detail-media">${imgWithFallback(pkg.imagePath, journeyImage(0), pkg.name)}</div>
+            <div class="detail-media"></div>
             <div class="detail-info">
                 <span class="card-badge">Curated Package</span>
                 <h1>${pkg.name}</h1>
@@ -401,12 +488,36 @@ function initPackageDetail() {
         </div>
         <section class="detail-section">
             <h2 class="section-title">Destinations On This Journey</h2>
-            <div class="stops-grid">${stopsHtml}</div>
+            <div class="stops-grid"></div>
         </section>
         <section class="detail-section">
             <h2 class="section-title">Frequently Asked Questions</h2>
             <div class="faq-list">${faqHtml}</div>
         </section>`;
+
+    root.querySelector('.detail-media').appendChild(
+        createImageWithFallback(pkg.imagePath, journeyImage(0), pkg.name)
+    );
+
+    const stopsGrid = root.querySelector('.stops-grid');
+    stops.forEach(d => {
+        const stop = document.createElement('article');
+        stop.className = 'stop-card';
+
+        const stopImg = document.createElement('div');
+        stopImg.className = 'stop-img';
+        stopImg.appendChild(createImageWithFallback(d.imagePath, categoryImage(d.category), d.name));
+
+        const stopBody = document.createElement('div');
+        stopBody.className = 'stop-body';
+        stopBody.innerHTML = `
+                <div class="card-head"><h4>${d.name}</h4><span class="card-badge">${d.category}</span></div>
+                <p class="stop-meta">${d.lightYears} LY · ${d.requiredShip} · ${formatPrice(d.cost)}</p>`;
+
+        stop.appendChild(stopImg);
+        stop.appendChild(stopBody);
+        stopsGrid.appendChild(stop);
+    });
 }
 
 
@@ -434,7 +545,7 @@ function initSpaceshipDetail() {
     root.innerHTML = `
         <a href="spaceships.html" class="back-link">← Back to the fleet</a>
         <div class="detail-hero">
-            <div class="detail-media">${imgWithFallback(ship.imagePath, PLACEHOLDER_IMAGE, ship.name)}</div>
+            <div class="detail-media"></div>
             <div class="detail-info">
                 <span class="card-badge">${ship.shipClass}</span>
                 <h1>${ship.name}</h1>
@@ -455,6 +566,10 @@ function initSpaceshipDetail() {
                 <tr><th>Fuel Source</th><td>${ship.fuelSource}</td></tr>
             </table>
         </section>`;
+
+    root.querySelector('.detail-media').appendChild(
+        createImageWithFallback(ship.imagePath, PLACEHOLDER_IMAGE, ship.name)
+    );
 }
 
 
@@ -505,9 +620,30 @@ function buildChatbot() {
 
 
 /* -----------------------------------------------------------------------
+   HERO VIDEO — attach the large MP4 only after first paint
+----------------------------------------------------------------------- */
+function initHeroVideo() {
+    const video = document.querySelector('.hero-video[data-src]');
+    if (!video) return;
+    const src = video.getAttribute('data-src');
+    if (!src) return;
+    const source = document.createElement('source');
+    source.src = src;
+    source.type = 'video/mp4';
+    video.appendChild(source);
+    video.removeAttribute('data-src');
+    video.load();
+    const play = () => video.play().catch(() => {});
+    if (video.readyState >= 2) play();
+    else video.addEventListener('loadeddata', play, { once: true });
+}
+
+
+/* -----------------------------------------------------------------------
    START
 ----------------------------------------------------------------------- */
 document.addEventListener('DOMContentLoaded', () => {
+    /* 1) Build chrome + catalogue UI while body is still hidden */
     document.body.insertBefore(buildNavigation(), document.body.firstChild);
     document.body.appendChild(buildFooter());
     buildChatbot();
@@ -517,4 +653,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initPackageDetail();
     initSpaceshipsPage();
     initSpaceshipDetail();
+
+    /* 2) Wait for images (or fallbacks) so alt-text never flashes on reveal */
+    whenImagesReady(document, 4000).then(() => {
+        document.documentElement.classList.add('app-ready');
+        /* 3) Heavy hero video only after the page is visible with images in place */
+        requestAnimationFrame(() => initHeroVideo());
+    });
 });

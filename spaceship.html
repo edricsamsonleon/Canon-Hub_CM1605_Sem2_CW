@@ -17,8 +17,11 @@
     <meta name="twitter:title" content="Spaceship Details | Interstellar Agency">
     <meta name="twitter:description" content="Detailed specifications for an Interstellar Agency spaceship.">
     <meta name="description" content="Detailed specifications for an Interstellar Agency spaceship.">
-    <script>(function(){try{if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');}catch(e){}})();</script>
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <!-- Theme + reveal: apply saved theme before paint; reveal body after JS builds header (or after 2s safety). -->
+    <script>(function(){try{if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');}catch(e){}setTimeout(function(){document.documentElement.classList.add('app-ready');},2000);})();</script>
+    <style>html:not(.app-ready) body{visibility:hidden}</style>
+    <noscript><style>html body{visibility:visible!important}</style></noscript>
+    <link rel="icon" type="image/png" href="assets/favicon.png">
     <link rel="stylesheet" href="css/global.css">
 </head>
 <body>

@@ -12,6 +12,25 @@
 @font-face{font-family:'Archivo';font-style:normal;font-weight:100 900;font-display:swap;src:url('../assets/fonts/Archivo.woff2') format('woff2');}
 @font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;src:url('../assets/fonts/Inter.woff2') format('woff2');}
 
+/* No animated theme/hover transitions until the page is revealed — stops a flashy first paint. */
+html:not(.app-ready) * { transition: none !important; }
+
+/* Hide images until their bitmap has loaded — prevents alt-text / broken-icon flash */
+img.img-pending {
+    opacity: 0;
+    color: transparent;
+    font-size: 0;
+}
+img.img-ready {
+    opacity: 1;
+}
+.card-img,
+.detail-media,
+.stop-img,
+.nav-logo {
+    background: rgba(128, 128, 128, 0.12);
+}
+
 
 /* =========================================
    1. THEME TOKENS

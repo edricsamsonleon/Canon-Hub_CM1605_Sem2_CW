@@ -18,11 +18,13 @@
     <meta name="twitter:title" content="About | Interstellar Agency">
     <meta name="twitter:description" content="Interstellar Agency — premium interstellar travel with 90 destinations, 15 curated packages and a fleet of 15 spaceships.">
 
-    <!-- Apply the saved theme before the page paints (prevents a flash) -->
-    <script>(function(){try{if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');}catch(e){}})();</script>
+    <!-- Theme + reveal: apply saved theme before paint; reveal body after JS builds header (or after 2s safety). -->
+    <script>(function(){try{if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');}catch(e){}setTimeout(function(){document.documentElement.classList.add('app-ready');},2000);})();</script>
+    <style>html:not(.app-ready) body{visibility:hidden}</style>
+    <noscript><style>html body{visibility:visible!important}</style></noscript>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
 
     <!-- Stylesheet -->
     <link rel="stylesheet" href="css/global.css">

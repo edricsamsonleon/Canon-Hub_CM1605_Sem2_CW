@@ -18,9 +18,12 @@
     <meta name="twitter:description" content="Explore 90 interstellar destinations across nebulas, stars, satellites, planets and black holes.">
     <meta name="description" content="Explore 90 interstellar destinations across nebulas, stars, satellites, planets and black holes.">
 
-    <script>(function(){try{if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');}catch(e){}})();</script>
+    <!-- Theme + reveal: apply saved theme before paint; reveal body after JS builds header (or after 2s safety). -->
+    <script>(function(){try{if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');}catch(e){}setTimeout(function(){document.documentElement.classList.add('app-ready');},2000);})();</script>
+    <style>html:not(.app-ready) body{visibility:hidden}</style>
+    <noscript><style>html body{visibility:visible!important}</style></noscript>
 
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
     <link rel="stylesheet" href="css/global.css">
 </head>
 <body>
@@ -57,7 +60,7 @@
                 </div>
 
                 <div class="results-bar">
-                    <span id="results-count">Loading destinations…</span>
+                    <span id="results-count"></span>
                 </div>
 
                 <!-- Destination cards injected by app.js -->
